@@ -1,0 +1,11 @@
+Django==6.1.*
+django-mongodb-backend==6.1.*
+python-telegram-bot==22.*
+openai>=3.24,<4
+anthropic>=1.11,<2
+llama-index-core>=0.14,<0.15
+llama-index-retrievers-bm25>=0.8,<0.9
+llama-index-embeddings-openai-like>=0.4,<0.5
+requests>=2.32
+beautifulsoup4>=4.12
+python-dotenv>=1.0

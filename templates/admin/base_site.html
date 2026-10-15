@@ -1,0 +1,49 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+  :root {
+    --font-family-primary: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
+    --font-family-monospace: ui-monospace, Consolas, monospace;
+    --primary: #2f5bea;
+    --secondary: #3d4f8f;
+    --accent: #6a8bff;
+    --header-bg: #2f5bea;
+    --header-color: #ffffff;
+    --header-branding-color: #ffffff;
+    --button-bg: #2f5bea;
+    --button-hover-bg: #1f45c4;
+    --default-button-bg: #2f5bea;
+    --default-button-hover-bg: #1f45c4;
+  }
+  body, input, textarea, select, button, td, th { font-family: var(--font-family-primary); }
+  #site-name a, #site-name a:link, #site-name a:visited, #header a:link, #header a:visited { color: #fff; }
+  #site-name a { font-weight: 700; letter-spacing: 0; }
+  #user-tools a { border-bottom-color: rgba(255, 255, 255, .4); }
+  #header { box-shadow: 0 2px 10px rgba(20, 30, 70, .18); }
+  .module { border-radius: 10px; overflow: hidden; }
+  .module caption, .module h2 { font-weight: 600; }
+  textarea, input[type=text], input[type=url], input[type=number], select { border-radius: 8px; }
+  textarea { line-height: 1.8; }
+  .object-tools a { border-radius: 16px; }
+  /* Long Persian answers and course texts: keep the editing boxes roomy and readable. */
+  .form-row textarea { min-height: 130px; width: 100%; max-width: 760px; }
+  td, th { line-height: 1.7; }
+  /* Keep numbers, URLs and Latin text in the right place inside RTL pages. */
+  input[type=url], input[type=number], .vURLField { direction: ltr; text-align: left; }
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

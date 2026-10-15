@@ -1,0 +1,53 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .conv-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 18px; color: var(--body-quiet-color); }
+  .conv-head .pill { padding: 2px 12px; border-radius: 999px; background: var(--darkened-bg); font-size: 13px; }
+  .conv-head .pill.warn { background: #fff4dc; color: #8a5a00; }
+  .thread { display: flex; flex-direction: column; gap: 12px; max-width: 760px; padding: 18px; border-radius: 14px;
+            background: var(--darkened-bg); border: 1px solid var(--hairline-color); }
+  .msg { max-width: 82%; display: flex; flex-direction: column; gap: 3px; }
+  .msg.user { align-self: flex-start; align-items: flex-start; }      /* start = right edge (RTL) */
+  .msg.assistant { align-self: flex-end; align-items: flex-end; }
+  .msg .who { font-size: 12px; color: var(--body-quiet-color); padding: 0 4px; }
+  .msg .bubble { padding: 9px 14px; border-radius: 16px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9;
+                 background: var(--body-bg); border: 1px solid var(--hairline-color); }
+  .msg.user .bubble { background: #2f5bea; color: #fff; border-color: #2f5bea; border-end-start-radius: 4px; }
+  .msg.assistant .bubble { border-end-end-radius: 4px; }
+  .msg .flag { align-self: inherit; font-size: 12px; padding: 1px 10px; border-radius: 999px; background: #fff4dc; color: #8a5a00; }
+  .msg .time { font-size: 11.5px; color: var(--body-quiet-color); padding: 0 4px; direction: ltr; }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">خانه</a> &rsaquo;
+  <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a> &rsaquo;
+  <a href="{{ list_url }}">{{ opts.verbose_name_plural }}</a> &rsaquo;
+  {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="conv-head">
+  <span class="pill">کانال: {{ channel_label }}</span>
+  <span class="pill">شناسه گفتگو: <span dir="ltr">{{ chat_id }}</span></span>
+  <span class="pill">{{ thread|length }} پیام</span>
+  {% if escalated_count %}<span class="pill warn">{{ escalated_count }} مورد ارجاع به کارشناس</span>{% endif %}
+</div>
+
+<div class="thread">
+  {% for m in thread %}
+    <div class="msg {{ m.role }}">
+      <div class="who">{% if m.role == "user" %}کاربر{% else %}ربات / کارشناس{% endif %}</div>
+      <div class="bubble" dir="auto">{{ m.text }}</div>
+      {% if m.escalated %}<div class="flag">✋ به کارشناسان ارجاع شد</div>{% endif %}
+      <div class="time">{{ m.created_at|date:"Y/m/d H:i" }}</div>
+    </div>
+  {% endfor %}
+</div>
+
+<p><a href="{{ list_url }}">&rarr; بازگشت به فهرست پیام‌ها</a></p>
+{% endblock %}
